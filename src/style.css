@@ -9,6 +9,7 @@
 }
 body {
   background-color: gray;
+  position: relative;
 }
 
 header {
@@ -24,8 +25,26 @@ header {
   display: flex;
 }
 
-.user img {
-  width: 70px;
-  stroke-width: 1px;
-  stroke: var(--secondary-color);
+.user-icon-svg {
+  /* 1. Use your CSS variable for the main state */
+  color: var(--primary-color);
+
+  /* 2. Transition makes the color swap smoothly */
+  transition: color 0.2s ease-in-out;
+}
+
+::backdrop {
+  background-image: linear-gradient(
+    45deg,
+    rgb(231, 227, 231),
+    rgb(67, 66, 68),
+    rgb(162, 164, 167)
+  );
+  opacity: 0.75;
+}
+
+dialog[open] {
+  position: fixed;
+  inset: 0;
+  margin: auto;
 }

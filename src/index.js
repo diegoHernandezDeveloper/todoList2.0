@@ -132,8 +132,20 @@ function udpdateMainAddingATask(index) {
     tdEditBtn.appendChild(editBtn);
 
     const deleteBtn = returnElement(`button`, `X`);
+    deleteBtn.setAttribute(`index`, `${index}`);
+    deleteBtn.setAttribute(`name`, `${todo.title}`);
     const tdDeleteBtn = document.createElement(`td`);
     tdDeleteBtn.appendChild(deleteBtn);
+    deleteBtn.addEventListener(`click`, (e) => {
+      const index = e.target.getAttribute(`index`);
+      const todoName = e.target.getAttribute(`name`);
+      const indexTwo = projects[index].todos.findIndex(
+        (item) => item.title == todoName,
+      );
+
+      projects[index].todos.splice(indexTwo, 1);
+      udpdateMainAddingATask(index);
+    });
 
     tr.append(
       returnElement(`td`, todo.title),

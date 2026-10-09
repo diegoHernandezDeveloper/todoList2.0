@@ -1,18 +1,27 @@
 :root {
-  --primary-color: rgb(37, 37, 228);
-  --secondary-color: rgb(164, 164, 165);
+  --primary-color: rgb(46, 143, 207);
+  --secondary-color: rgb(231, 228, 228);
+  --third-color: rgb(162, 215, 250);
+  --fourth-color: rgb(214, 213, 213);
 }
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  border-collapse: collapse;
 }
+
 body {
+  color: var(--primary-color);
   background-color: gray;
   position: relative;
+  display: grid;
+  grid-template: 80px 1fr / 200px 1fr;
 }
 
 header {
+  grid-column: 1/3;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   display: flex;
@@ -21,16 +30,25 @@ header {
   gap: 10px;
 }
 
-.user {
-  display: flex;
+nav {
+  height: calc(100vh - 80px);
+  width: 200px;
+  padding: 20px 0 0 20px;
+  background-color: var(--secondary-color);
 }
 
-.user-icon-svg {
-  /* 1. Use your CSS variable for the main state */
-  color: var(--primary-color);
+h2 {
+  margin: 20px 0 10px 0;
+  width: fit-content;
+  border-radius: 1px;
+  border-bottom: double 2px var(--primary-color);
+}
 
-  /* 2. Transition makes the color swap smoothly */
-  transition: color 0.2s ease-in-out;
+li {
+  list-style: square;
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 ::backdrop {
@@ -43,8 +61,89 @@ header {
   opacity: 0.75;
 }
 
+dialog {
+  font-size: 20px;
+  gap: 10px;
+  padding: 20px 100px;
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  color: var(--primary-color);
+}
+
+dialog form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+dialog button {
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
 dialog[open] {
   position: fixed;
   inset: 0;
   margin: auto;
+}
+
+input {
+  padding: 5px 2px;
+  color: var(--primary-color);
+}
+
+select {
+  color: var(--primary-color);
+  padding: 5px;
+  font-weight: bold;
+}
+
+button {
+  font-size: 18px;
+  color: var(--primary-color);
+  background: none;
+  border: none;
+
+  font-weight: bold;
+  text-align: start;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  color: var(--third-color);
+}
+
+button[close] {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 2px 8px;
+}
+
+/* main  */
+
+main {
+  height: calc(100vh - 80px);
+  background-color: var(--fourth-color);
+  padding: 10px;
+}
+
+table {
+  width: 100%;
+  min-width: 850px;
+}
+
+th {
+  border-bottom: 3px solid var(--primary-color);
+}
+
+td {
+  border-bottom: 1px solid var(--primary-color);
+  padding: 20px 0 5px;
 }

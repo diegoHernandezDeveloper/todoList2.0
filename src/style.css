@@ -141,9 +141,29 @@ table {
 
 th {
   border-bottom: 3px solid var(--primary-color);
+  text-align: start;
 }
 
 td {
   border-bottom: 1px solid var(--primary-color);
   padding: 20px 0 5px;
+  text-align: start;
+}
+
+input[type="checkbox"] {
+  align-self: center;
+}
+
+h3 {
+  margin: 5px 0 30px;
+}
+
+tr[checked],
+tr[checked] button {
+  text-decoration: line-through;
+  color: green;
+}
+
+input:checked {
+  accent-color: green;
 }

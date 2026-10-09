@@ -29,7 +29,7 @@
     </nav>
 
     <main>
-      <h1>Todos</h1>
+      <h3 nameMain>Todos</h3>
       <table>
         <thead>
           <tr>
@@ -38,6 +38,7 @@
             <th>Due Date</th>
             <th>Priority</th>
             <th>State</th>
+            <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
@@ -46,13 +47,14 @@
     </main>
 
     <dialog id="addProjectDialog">
-      <form action="">
+      <form action="" formAddProject>
         <label for="projectValue"> Name: </label>
         <input
           id="projectValue"
           name="projectValue"
           type="text"
           placeholder="Name of your project"
+          required
         />
         <button addProject type="submit">Add</button>
       </form>
@@ -60,7 +62,7 @@
     </dialog>
 
     <dialog id="addTaskDialog">
-      <form action="">
+      <form action="" formAddTask>
         <label for="title">Title</label>
         <input type="text" id="title" name="title" required />
 

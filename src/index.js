@@ -1,4 +1,5 @@
 import "./style.css";
+import { parseISO, format } from "date-fns";
 
 const addProjectBtn = document.querySelector(`form[formAddProject]`);
 const addTaskBtn = document.querySelector(`form[formAddTask]`);
@@ -20,20 +21,12 @@ class Todo {
   }
 }
 
-const cook = new Todo(
-  `cook`,
-  `make that sweet sweet potato dude!`,
-  `today`,
-  `high`,
+projects[0].todos.push(
+  new Todo(`Cook`, `Make that sweet sweet potato dude!`, `Oct, 9`, `high`),
 );
-const lundry = new Todo(
-  `do the lundry`,
-  `do it before wife comes home!`,
-  `today`,
-  `high`,
+projects[0].todos.push(
+  new Todo(`Do the lundry`, `Do it before wife comes home!`, `Oct, 9`, `high`),
 );
-projects[0].todos.push(cook);
-projects[0].todos.push(lundry);
 
 addProjectBtn.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -51,13 +44,14 @@ addTaskBtn.addEventListener("submit", (e) => {
   const title = document.querySelector(`#title`);
   const description = document.querySelector(`#description`);
   const dueDate = document.querySelector(`#dueDate`);
+  const formatedDate = format(parseISO(dueDate.value), `MMM, d`);
 
   const priority = document.querySelector(`#priority`);
   const project = document.querySelector(`#project`);
 
   const index = projects.findIndex((item) => item.name == project.value);
   projects[index].todos.push(
-    new Todo(title.value, description.value, dueDate.value, priority.value),
+    new Todo(title.value, description.value, formatedDate, priority.value),
   );
 
   udpdateMainAddingATask(index);
@@ -127,23 +121,19 @@ function udpdateMainAddingATask(index) {
     const tdCheckbox = document.createElement(`td`);
     tdCheckbox.appendChild(checkbox);
 
-    const editBtn = returnElement(`button`, `edit`);
-    const tdEditBtn = document.createElement(`td`);
-    tdEditBtn.appendChild(editBtn);
-
     const deleteBtn = returnElement(`button`, `X`);
     deleteBtn.setAttribute(`index`, `${index}`);
     deleteBtn.setAttribute(`name`, `${todo.title}`);
     const tdDeleteBtn = document.createElement(`td`);
     tdDeleteBtn.appendChild(deleteBtn);
     deleteBtn.addEventListener(`click`, (e) => {
-      const index = e.target.getAttribute(`index`);
+      const projectIndex = e.target.getAttribute(`index`);
       const todoName = e.target.getAttribute(`name`);
-      const indexTwo = projects[index].todos.findIndex(
+      const todoIndex = projects[projectIndex].todos.findIndex(
         (item) => item.title == todoName,
       );
 
-      projects[index].todos.splice(indexTwo, 1);
+      projects[projectIndex].todos.splice(todoIndex, 1);
       udpdateMainAddingATask(index);
     });
 
@@ -153,7 +143,6 @@ function udpdateMainAddingATask(index) {
       returnElement(`td`, todo.dueDate),
       returnElement(`td`, todo.priority),
       tdCheckbox,
-      tdEditBtn,
       tdDeleteBtn,
     );
     if (todo.state == `checked`) {

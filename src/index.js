@@ -30,11 +30,11 @@ projects[0].todos.push(
 
 addProjectBtn.addEventListener("submit", (e) => {
   e.preventDefault();
-  const project = document.querySelector(`#projectValue`);
+  const project = document.querySelector(`#projectInput`);
   const projectObject = { name: `${project.value}`, todos: [] };
   projects.push(projectObject);
   addProjectBtn.reset();
-  document.querySelector(`#addProjectDialog`).close();
+  document.querySelector(`#projectDialog`).close();
 
   udpateProjects();
 });
@@ -56,7 +56,7 @@ addTaskBtn.addEventListener("submit", (e) => {
 
   udpdateMainAddingATask(index);
   addTaskBtn.reset();
-  document.querySelector(`#addTaskDialog`).close();
+  document.querySelector(`#taskDialog`).close();
 });
 
 function udpateProjects() {
@@ -92,7 +92,7 @@ function udpdateMainAddingATask(index) {
   const tbody = document.querySelector(`tbody`);
   tbody.innerHTML = ``;
   const todos = projects[index].todos;
-  const h3 = document.querySelector(`h3[nameMain]`);
+  const h3 = document.querySelector(`h3`);
   h3.innerText = projects[index].name;
   for (let todo of todos) {
     const tr = document.createElement(`tr`);

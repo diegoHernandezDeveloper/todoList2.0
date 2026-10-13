@@ -11,25 +11,25 @@
       <p>Write, Do it, Fheck it.</p>
     </header>
     <nav>
-      <div class="navAdd">
-        <button command="show-modal" commandfor="addTaskDialog">
+      <div>
+        <button command="show-modal" commandfor="taskDialog">
           Add a task +
         </button>
-        <button command="show-modal" commandfor="addProjectDialog">
+        <button command="show-modal" commandfor="projectDialog">
           Add a project +
         </button>
       </div>
 
-      <div class="navProjects">
+      <div>
         <h2>Projects</h2>
-        <div projects>
+        <div>
           <ul ul-projects></ul>
         </div>
       </div>
     </nav>
 
     <main>
-      <h3 nameMain>Todos</h3>
+      <h3>Todos</h3>
       <table>
         <thead>
           <tr>
@@ -45,22 +45,22 @@
       </table>
     </main>
 
-    <dialog id="addProjectDialog">
+    <dialog id="projectDialog">
       <form action="" formAddProject>
-        <label for="projectValue"> Name: </label>
+        <label for="projectInput"> Name: </label>
         <input
-          id="projectValue"
-          name="projectValue"
+          id="projectInput"
+          name="projectInput"
           type="text"
           placeholder="Name of your project"
           required
         />
         <button addProject type="submit">Add</button>
       </form>
-      <button command="close" commandfor="addProjectDialog" close>X</button>
+      <button command="close" commandfor="projectDialog" close>X</button>
     </dialog>
 
-    <dialog id="addTaskDialog">
+    <dialog id="taskDialog">
       <form action="" formAddTask>
         <label for="title">Title</label>
         <input type="text" id="title" name="title" required />
@@ -74,8 +74,8 @@
         <label for="priority">Priority</label>
         <select name="priority" id="priority">
           <option value="high">High</option>
-          <option value="high">Medium</option>
-          <option value="high">Low</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
         </select>
 
         <label for="project">Project</label>
@@ -85,7 +85,7 @@
 
         <button addTask type="submit">Add</button>
       </form>
-      <button command="close" commandfor="addTaskDialog" close>X</button>
+      <button command="close" commandfor="taskDialog" close>X</button>
     </dialog>
   </body>
 </html>

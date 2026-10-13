@@ -17,6 +17,12 @@ let projects = [
   },
 ];
 
+if (JSON.parse(localStorage.getItem(`projects`)))
+  projects = JSON.parse(localStorage.getItem(`projects`));
+
+const updateLocalStorage = () =>
+  localStorage.setItem(`projects`, JSON.stringify(projects));
+
 class Todo {
   constructor(title, description, dueDate, priority) {
     this.title = title;
@@ -27,18 +33,26 @@ class Todo {
   }
 }
 
-projects[0].todos.push(
-  new Todo(`Cook`, `Make that sweet sweet potato dude!`, `Oct, 9`, `high`),
-);
-projects[0].todos.push(
-  new Todo(`Do the lundry`, `Do it before wife comes home!`, `Oct, 9`, `high`),
-);
+if (projects[0].todos.length < 1) {
+  projects[0].todos.push(
+    new Todo(`Cook`, `Make that sweet sweet potato dude!`, `Oct, 9`, `high`),
+  );
+  projects[0].todos.push(
+    new Todo(
+      `Do the lundry`,
+      `Do it before wife comes home!`,
+      `Oct, 9`,
+      `high`,
+    ),
+  );
+}
 
 addProjectForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   createAndPushProject();
   updateProjectsList();
+  updateLocalStorage();
 
   addProjectForm.reset();
   document.querySelector(`#projectDialog`).close();
@@ -48,6 +62,7 @@ addTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   createAndPushTodo();
+  updateLocalStorage();
 
   addTaskForm.reset();
   document.querySelector(`#taskDialog`).close();

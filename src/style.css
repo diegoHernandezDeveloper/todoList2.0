@@ -135,8 +135,9 @@ main {
 }
 
 table {
-  width: 100%;
+  width: 90%;
   min-width: 850px;
+  margin: 10px 30px;
 }
 
 th {

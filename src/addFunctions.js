@@ -61,6 +61,7 @@ function udpdateMain(index) {
   for (let todo of todos) {
     const tr = document.createElement(`tr`);
 
+    //Checkbox
     const checkbox = document.createElement(`input`);
     checkbox.setAttribute(`type`, `checkbox`);
     checkbox.setAttribute(`indexProject`, `${index}`);
@@ -79,11 +80,28 @@ function udpdateMain(index) {
           ? `checked`
           : `unchecked`;
       udpdateMain(indexProject);
+      localStorage.setItem(`projects`, JSON.stringify(projects));
     });
 
     const tdCheckbox = document.createElement(`td`);
     tdCheckbox.appendChild(checkbox);
 
+    //Edit Btn
+    const editButton = createAndReturnElement(`button`, "✎");
+    editButton.setAttribute(`index`, `${index}`);
+    editButton.setAttribute(`name`, `${todo.title}`);
+    const editButtonTD = document.createElement(`td`);
+    editButtonTD.appendChild(editButton);
+    editButton.addEventListener("click", (e) => {
+      const projectIndex = e.target.getAttribute(`index`);
+      const todoName = e.target.getAttribute(`name`);
+      const todoIndex = projects[projectIndex].todos.findIndex(
+        (item) => item.title == todoName,
+      );
+      console.log(projects[todoIndex].todos[todoIndex]);
+    });
+
+    //Delete Btn
     const deleteBtn = createAndReturnElement(`button`, `X`);
     deleteBtn.setAttribute(`index`, `${index}`);
     deleteBtn.setAttribute(`name`, `${todo.title}`);
@@ -99,6 +117,7 @@ function udpdateMain(index) {
 
       projects[projectIndex].todos.splice(todoIndex, 1);
       udpdateMain(index);
+      localStorage.setItem(`projects`, JSON.stringify(projects));
     });
 
     tr.append(
@@ -107,6 +126,7 @@ function udpdateMain(index) {
       createAndReturnElement(`td`, todo.dueDate),
       createAndReturnElement(`td`, todo.priority),
       tdCheckbox,
+      editButtonTD,
       tdDeleteBtn,
     );
     if (todo.state == `checked`) {

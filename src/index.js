@@ -72,4 +72,4 @@ updateProjectsList();
 udpdateMain(0);
 
 export { projects, Todo };
-// learn to store in local store, finist the editing todos, create the botons to complete and erase
+// implement edit functionality

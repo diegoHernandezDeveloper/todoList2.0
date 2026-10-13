@@ -12,11 +12,11 @@
     </header>
     <nav>
       <div>
-        <button command="show-modal" commandfor="taskDialog">
-          Add a task +
-        </button>
         <button command="show-modal" commandfor="projectDialog">
           Add a project +
+        </button>
+        <button command="show-modal" commandfor="taskDialog">
+          Add a task +
         </button>
       </div>
 
@@ -47,10 +47,10 @@
 
     <dialog id="projectDialog">
       <form action="" formAddProject>
-        <label for="projectInput"> Name: </label>
+        <label for="projectNameInput"> Name: </label>
         <input
-          id="projectInput"
-          name="projectInput"
+          id="projectNameInput"
+          name="projectNameInput"
           type="text"
           placeholder="Name of your project"
           required
@@ -78,8 +78,8 @@
           <option value="low">Low</option>
         </select>
 
-        <label for="project">Project</label>
-        <select name="project" id="project">
+        <label for="projectSelect">Project</label>
+        <select name="project" id="projectSelect">
           <option value="default">Default</option>
         </select>
 

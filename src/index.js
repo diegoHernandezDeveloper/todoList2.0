@@ -1,8 +1,8 @@
 import "./style.css";
 import { parseISO, format } from "date-fns";
 
-const addProjectBtn = document.querySelector(`form[formAddProject]`);
-const addTaskBtn = document.querySelector(`form[formAddTask]`);
+const addProjectForm = document.querySelector(`form[formAddProject]`);
+const addTaskForm = document.querySelector(`form[formAddTask]`);
 
 let projects = [
   {
@@ -17,7 +17,7 @@ class Todo {
     this.description = description;
     this.dueDate = dueDate;
     this.priority = priority;
-    this.state = `check`;
+    this.state = `unchecked`;
   }
 }
 
@@ -28,51 +28,52 @@ projects[0].todos.push(
   new Todo(`Do the lundry`, `Do it before wife comes home!`, `Oct, 9`, `high`),
 );
 
-addProjectBtn.addEventListener("submit", (e) => {
+addProjectForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const project = document.querySelector(`#projectInput`);
-  const projectObject = { name: `${project.value}`, todos: [] };
-  projects.push(projectObject);
-  addProjectBtn.reset();
-  document.querySelector(`#projectDialog`).close();
 
-  udpateProjects();
+  createAndPushProject();
+  updateProjectsList();
+
+  addProjectForm.reset();
+  document.querySelector(`#projectDialog`).close();
 });
 
-addTaskBtn.addEventListener("submit", (e) => {
+addTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const title = document.querySelector(`#title`);
-  const description = document.querySelector(`#description`);
-  const dueDate = document.querySelector(`#dueDate`);
-  const formatedDate = format(parseISO(dueDate.value), `MMM, d`);
 
-  const priority = document.querySelector(`#priority`);
-  const project = document.querySelector(`#project`);
+  createAndPushTodo();
+  //udpdateMain(index);
 
-  const index = projects.findIndex((item) => item.name == project.value);
-  projects[index].todos.push(
-    new Todo(title.value, description.value, formatedDate, priority.value),
-  );
-
-  udpdateMainAddingATask(index);
-  addTaskBtn.reset();
+  addTaskForm.reset();
   document.querySelector(`#taskDialog`).close();
 });
 
-function udpateProjects() {
+function createAndPushProject() {
+  const projectNameInput = document.querySelector(`#projectNameInput`);
+  const projectObject = { name: `${projectNameInput.value}`, todos: [] };
+  projects.push(projectObject);
+}
+
+function updateProjectsList() {
   const ul = document.querySelector(`ul[ul-projects]`);
-  const selectElement = document.querySelector(`#project`);
+  const selectElement = document.querySelector(`#projectSelect`);
   selectElement.innerHTML = ``;
   ul.innerHTML = ``;
   for (let project of projects) {
     const li = document.createElement(`li`);
     const button = document.createElement(`button`);
-    const option = returnElement(`option`, `${project.name}`);
+    const option = createAndReturnElement(`option`, `${project.name}`);
 
     option.value = project.name;
-    button.setAttribute(`namevalue`, `${project.name}`);
+    button.setAttribute(`nameProject`, `${project.name}`);
     button.innerText = project.name;
-    button.addEventListener(`click`, updateMain);
+
+    button.addEventListener(`click`, (e) => {
+      const index = projects.findIndex(
+        (item) => item.name == e.target.getAttribute(`nameProject`),
+      );
+      udpdateMain(index);
+    });
 
     selectElement.appendChild(option);
     li.appendChild(button);
@@ -80,20 +81,29 @@ function udpateProjects() {
   }
 }
 
-function updateMain(e) {
-  const index = projects.findIndex(
-    (item) => item.name == e.target.getAttribute(`namevalue`),
-  );
+function createAndPushTodo() {
+  const title = document.querySelector(`#title`);
+  const description = document.querySelector(`#description`);
+  const dueDate = document.querySelector(`#dueDate`);
+  const formatedDate = format(parseISO(dueDate.value), `MMM, d`);
+  const priority = document.querySelector(`#priority`);
+  const projectDestination = document.querySelector(`#projectSelect`);
 
-  udpdateMainAddingATask(index);
+  const index = projects.findIndex(
+    (item) => item.name == projectDestination.value,
+  );
+  projects[index].todos.push(
+    new Todo(title.value, description.value, formatedDate, priority.value),
+  );
 }
 
-function udpdateMainAddingATask(index) {
+function udpdateMain(index) {
   const tbody = document.querySelector(`tbody`);
   tbody.innerHTML = ``;
   const todos = projects[index].todos;
   const h3 = document.querySelector(`h3`);
   h3.innerText = projects[index].name;
+
   for (let todo of todos) {
     const tr = document.createElement(`tr`);
 
@@ -111,21 +121,21 @@ function udpdateMainAddingATask(index) {
       const arr = projects[indexProject].todos;
       const result = arr.findIndex((object) => object.title == todoName);
       projects[indexProject].todos[result].state =
-        projects[indexProject].todos[result].state == `check`
+        projects[indexProject].todos[result].state == `unchecked`
           ? `checked`
-          : `check`;
-      udpdateMainAddingATask(indexProject);
-      console.log(projects[indexProject].todos[result].state);
+          : `unchecked`;
+      udpdateMain(indexProject);
     });
 
     const tdCheckbox = document.createElement(`td`);
     tdCheckbox.appendChild(checkbox);
 
-    const deleteBtn = returnElement(`button`, `X`);
+    const deleteBtn = createAndReturnElement(`button`, `X`);
     deleteBtn.setAttribute(`index`, `${index}`);
     deleteBtn.setAttribute(`name`, `${todo.title}`);
     const tdDeleteBtn = document.createElement(`td`);
     tdDeleteBtn.appendChild(deleteBtn);
+
     deleteBtn.addEventListener(`click`, (e) => {
       const projectIndex = e.target.getAttribute(`index`);
       const todoName = e.target.getAttribute(`name`);
@@ -134,14 +144,14 @@ function udpdateMainAddingATask(index) {
       );
 
       projects[projectIndex].todos.splice(todoIndex, 1);
-      udpdateMainAddingATask(index);
+      udpdateMain(index);
     });
 
     tr.append(
-      returnElement(`td`, todo.title),
-      returnElement(`td`, todo.description),
-      returnElement(`td`, todo.dueDate),
-      returnElement(`td`, todo.priority),
+      createAndReturnElement(`td`, todo.title),
+      createAndReturnElement(`td`, todo.description),
+      createAndReturnElement(`td`, todo.dueDate),
+      createAndReturnElement(`td`, todo.priority),
       tdCheckbox,
       tdDeleteBtn,
     );
@@ -152,12 +162,12 @@ function udpdateMainAddingATask(index) {
   }
 }
 
-function returnElement(element, content) {
+function createAndReturnElement(element, content) {
   const ele = document.createElement(`${element}`);
   ele.innerText = content;
   return ele;
 }
 
-udpateProjects();
-udpdateMainAddingATask(0);
+updateProjectsList();
+udpdateMain(0);
 // learn to store in local store, finist the editing todos, create the botons to complete and erase

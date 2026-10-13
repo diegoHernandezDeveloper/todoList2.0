@@ -158,8 +158,7 @@ h3 {
   margin: 5px 0 30px;
 }
 
-tr[checked],
-tr[checked] button {
+tr[checked] {
   text-decoration: line-through;
   color: green;
 }

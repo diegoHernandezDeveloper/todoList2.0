@@ -48,7 +48,6 @@ addTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   createAndPushTodo();
-  //udpdateMain(index);
 
   addTaskForm.reset();
   document.querySelector(`#taskDialog`).close();

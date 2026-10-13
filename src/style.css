@@ -155,7 +155,12 @@ input[type="checkbox"] {
 }
 
 h3 {
-  margin: 5px 0 30px;
+  display: block;
+  font-size: 2rem;
+  margin: 30px;
+
+  text-align: center;
+  text-decoration: underline 3px;
 }
 
 tr[checked] {

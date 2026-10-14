@@ -1,5 +1,6 @@
 import { parseISO, format } from "date-fns";
-import { projects, Todo } from ".";
+// 1. Import editState instead of the read-only todoBeingEdited binding
+import { projects, Todo, editState } from "./index.js";
 
 function createAndPushProject() {
   const projectNameInput = document.querySelector(`#projectNameInput`);
@@ -10,15 +11,18 @@ function createAndPushProject() {
 function updateProjectsList() {
   const ul = document.querySelector(`ul[ul-projects]`);
   const selectElement = document.querySelector(`#projectSelect`);
+
   selectElement.innerHTML = ``;
   ul.innerHTML = ``;
   for (let project of projects) {
     const li = document.createElement(`li`);
     const button = document.createElement(`button`);
+    const deleteBtn = createAndReturnElement(`button`, `X`);
     const option = createAndReturnElement(`option`, `${project.name}`);
 
     option.value = project.name;
     button.setAttribute(`nameProject`, `${project.name}`);
+    deleteBtn.setAttribute(`nameProject`, `${project.name}`);
     button.innerText = project.name;
 
     button.addEventListener(`click`, (e) => {
@@ -28,8 +32,22 @@ function updateProjectsList() {
       udpdateMain(index);
     });
 
+    deleteBtn.addEventListener(`click`, (e) => {
+      const index = projects.findIndex(
+        (item) => item.name == e.target.getAttribute(`nameProject`),
+      );
+      projects.splice(index, 1);
+      updateProjectsList();
+      localStorage.setItem(`projects`, JSON.stringify(projects));
+      udpdateMain(0);
+    });
+
     selectElement.appendChild(option);
-    li.appendChild(button);
+    if (project === projects[0]) {
+      li.append(button);
+    } else {
+      li.append(button, deleteBtn);
+    }
     ul.appendChild(li);
   }
 }
@@ -54,9 +72,13 @@ function createAndPushTodo() {
 function udpdateMain(index) {
   const tbody = document.querySelector(`tbody`);
   tbody.innerHTML = ``;
-  const todos = projects[index].todos;
+
+  // Guard clause in case a project index is out of bounds (e.g. after a project deletion)
+  const targetProject = projects[index] || projects[0];
+  const todos = targetProject.todos;
+
   const h3 = document.querySelector(`h3`);
-  h3.innerText = projects[index].name;
+  h3.innerText = targetProject.name;
 
   for (let todo of todos) {
     const tr = document.createElement(`tr`);
@@ -67,7 +89,7 @@ function udpdateMain(index) {
     checkbox.setAttribute(`indexProject`, `${index}`);
     checkbox.setAttribute(`todoName`, `${todo.title}`);
     if (todo.state == `checked`) {
-      checkbox.checked = `true`;
+      checkbox.checked = true;
     }
 
     checkbox.addEventListener(`change`, (e) => {
@@ -90,15 +112,37 @@ function udpdateMain(index) {
     const editButton = createAndReturnElement(`button`, "✎");
     editButton.setAttribute(`index`, `${index}`);
     editButton.setAttribute(`name`, `${todo.title}`);
+    editButton.setAttribute(`command`, `show-modal`);
+    // 2. Point this to taskDialog instead of editTaskDialog
+    editButton.setAttribute(`commandfor`, `taskDialog`);
     const editButtonTD = document.createElement(`td`);
     editButtonTD.appendChild(editButton);
+
     editButton.addEventListener("click", (e) => {
       const projectIndex = e.target.getAttribute(`index`);
       const todoName = e.target.getAttribute(`name`);
-      const todoIndex = projects[projectIndex].todos.findIndex(
+
+      // 3. Mutate the shared editState container safely
+      editState.todoBeingEdited = projects[projectIndex].todos.find(
         (item) => item.title == todoName,
       );
-      console.log(projects[todoIndex].todos[todoIndex]);
+
+      if (editState.todoBeingEdited) {
+        document.querySelector(`#title`).value =
+          editState.todoBeingEdited.title;
+        document.querySelector(`#description`).value =
+          editState.todoBeingEdited.description;
+        document.querySelector(`#priority`).value =
+          editState.todoBeingEdited.priority;
+
+        document.querySelector(`#projectSelect`).value =
+          projects[projectIndex].name;
+
+        // Target button safely using its custom attribute flag from your HTML
+        document.querySelector("form[formAddTask] button[addTask]").innerText =
+          `Save changes`;
+        document.querySelector(`#taskDialog`).showModal();
+      }
     });
 
     //Delete Btn
